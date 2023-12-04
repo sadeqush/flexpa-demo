@@ -1,0 +1,2 @@
+export const FLEXPA_PUBLISHABLE_KEY =
+  process.env.REACT_APP_FLEXPA_PUBLISHABLE_KEY || "";
