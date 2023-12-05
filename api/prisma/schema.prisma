@@ -15,3 +15,11 @@ model User {
   username String @unique
   password String
 }
+
+model Patient {
+  id                Int      @id @default(autoincrement())
+  accesstoken       String
+  fhirId            String
+  availableResource String[]
+  CreatedDate       DateTime @default(now())
+}

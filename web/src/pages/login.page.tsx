@@ -14,13 +14,19 @@ import {
   InputRightElement,
   Stack,
   chakra,
+  useToast,
 } from "@chakra-ui/react";
 import { ViewIcon, ViewOffIcon } from "@chakra-ui/icons";
+import { loginUser } from "../api";
 
 export const LoginPage = () => {
   const [passwordVisible, setPasswordVisible] = useState(false);
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
 
-  if (isAuthenticated()) return <Navigate to="/dashboard" />;
+  const toast = useToast();
+
+  if (isAuthenticated()) return <Navigate to="/patients" />;
 
   const ViewPassword = (props: {
     passwordVisible: boolean;
@@ -40,6 +46,30 @@ export const LoginPage = () => {
       />
     );
   };
+
+  const handleUsernameOnChange = (e: React.FormEvent<HTMLInputElement>) => {
+    setUsername(e.currentTarget.value);
+  };
+
+  const handlePasswordOnChange = (e: React.FormEvent<HTMLInputElement>) => {
+    setPassword(e.currentTarget.value);
+  };
+
+  async function handleLogin() {
+    let jwt = await loginUser(username, password);
+    window.localStorage.setItem("jwt", jwt);
+    window.location.reload();
+
+    if (!jwt) {
+      toast({
+        title: "Login Failed",
+        description: "Check your username and password.",
+        status: "error",
+        duration: 9000,
+        isClosable: false,
+      });
+    }
+  }
 
   return (
     <Flex p={50} w="full" alignItems="center" justifyContent="center">
@@ -78,7 +108,11 @@ export const LoginPage = () => {
               <Stack spacing={4} minW="450">
                 <FormControl id="username">
                   <FormLabel>Username</FormLabel>
-                  <Input type="username" placeholder="admin" />
+                  <Input
+                    type="username"
+                    placeholder="admin"
+                    onChange={handleUsernameOnChange}
+                  />
                   <FormErrorMessage></FormErrorMessage>
                 </FormControl>
 
@@ -88,6 +122,7 @@ export const LoginPage = () => {
                     <Input
                       placeholder="password"
                       type={passwordVisible ? "text" : "password"}
+                      onChange={handlePasswordOnChange}
                     />
                     <ViewPassword
                       passwordVisible={passwordVisible}
@@ -97,7 +132,12 @@ export const LoginPage = () => {
                   <FormErrorMessage></FormErrorMessage>
                 </FormControl>
 
-                <Button color="brand.500" variant={"solid"} type="submit">
+                <Button
+                  color="brand.500"
+                  variant={"solid"}
+                  type="submit"
+                  onClick={handleLogin}
+                >
                   Login
                 </Button>
               </Stack>

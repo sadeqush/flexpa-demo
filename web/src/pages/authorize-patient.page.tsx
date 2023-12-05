@@ -1,10 +1,20 @@
 import { useEffect, useState } from "react";
 import { FLEXPA_PUBLISHABLE_KEY } from "../config";
-import { chakra, Box, Stack, Flex, Button, Divider } from "@chakra-ui/react";
+import {
+  chakra,
+  Box,
+  Stack,
+  Flex,
+  Button,
+  Divider,
+  Center,
+  Spinner,
+} from "@chakra-ui/react";
 import { LockIcon } from "@chakra-ui/icons";
 import { useNavigate } from "react-router-dom";
 import FlexpaFailure from "../components/flexpa-failure.component";
 import FlexpaSuccess from "../components/flexpa-success.component";
+import { authorizePatientAPI } from "../api";
 
 declare const FlexpaLink: {
   create: (config: any) => Record<string, unknown>;
@@ -13,6 +23,7 @@ declare const FlexpaLink: {
 
 export const AuthorizePatientPage = () => {
   const [connStatus, setConnStatus] = useState("");
+  const [loadingStatus, setLoadingStatus] = useState(false);
 
   const navigate = useNavigate();
 
@@ -20,7 +31,7 @@ export const AuthorizePatientPage = () => {
     FlexpaLink.create({
       publishableKey: FLEXPA_PUBLISHABLE_KEY,
       onSuccess: async (publicToken: string) => {
-        handleConnectionSuccessful(publicToken);
+        await handleConnectionSuccessful(publicToken);
       },
       onExit: async () => {
         handleConnectionFailure();
@@ -36,13 +47,32 @@ export const AuthorizePatientPage = () => {
     navigate("/login");
   }
 
-  function handleConnectionSuccessful(pToken: string) {
-    //Call API with the publicToken
-    setConnStatus("success");
+  async function handleConnectionSuccessful(pToken: string) {
+    try {
+      let success = await authorizePatientAPI(pToken);
+      console.log(success, "sucess");
+      if (success) setConnStatus("success");
+    } catch (error) {
+      setConnStatus("failure");
+    }
   }
 
-  function handleConnectionFailure() {
+  async function handleConnectionFailure() {
     setConnStatus("failure");
+  }
+
+  if (loadingStatus) {
+    return (
+      <Center backdropBlur="6px" h="50rem">
+        <Spinner
+          thickness="4px"
+          speed="0.65s"
+          emptyColor="gray.200"
+          color="blue.500"
+          size="xl"
+        />
+      </Center>
+    );
   }
 
   return (

@@ -1,164 +1,63 @@
-import React from "react";
-import {
-  ButtonGroup,
-  Flex,
-  IconButton,
-  Table,
-  Tbody,
-  Td,
-  Th,
-  Thead,
-  Tr,
-  useColorModeValue,
-} from "@chakra-ui/react";
-import { AiFillEdit } from "react-icons/ai";
-import { BsBoxArrowUpRight, BsFillTrashFill } from "react-icons/bs";
+import { useEffect, useState } from "react";
+import dayjs from "dayjs";
+import { getPatients } from "../api";
+import { Card, CardHeader, Code, HStack, Heading, Tag } from "@chakra-ui/react";
+import { useNavigate } from "react-router-dom";
 
 export default function PatientList() {
-  const header = ["name", "created", "actions"];
-  const data = [
-    { name: "Daggy", created: "7 days ago" },
-    { name: "Anubra", created: "23 hours ago" },
-    { name: "Josef", created: "A few seconds ago" },
-    { name: "Sage", created: "A few hours ago" },
-  ];
-  const color1 = useColorModeValue("gray.400", "gray.400");
-  const color2 = useColorModeValue("gray.400", "gray.400");
+  const [patients, setPatients] = useState<any[]>();
 
-  return (
-    <Flex w="full" p={50} alignItems="center" justifyContent="center">
-      <Table
-        w="full"
-        bg="white"
-        _dark={{ bg: "gray.800" }}
-        display={{
-          base: "block",
-          md: "table",
-        }}
-        sx={{
-          "@media print": {
-            display: "table",
-          },
-        }}
-      >
-        <Thead
-          display={{
-            base: "none",
-            md: "table-header-group",
-          }}
-          sx={{
-            "@media print": {
-              display: "table-header-group",
-            },
-          }}
-        >
-          <Tr>
-            {header.map((x) => (
-              <Th key={x}>{x}</Th>
-            ))}
-          </Tr>
-        </Thead>
-        <Tbody
-          display={{
-            base: "block",
-            lg: "table-row-group",
-          }}
-          sx={{
-            "@media print": {
-              display: "table-row-group",
-            },
-          }}
-        >
-          {data.map((token, tid) => {
-            return (
-              <Tr
-                key={tid}
-                display={{
-                  base: "grid",
-                  md: "table-row",
-                }}
-                sx={{
-                  "@media print": {
-                    display: "table-row",
-                  },
-                  gridTemplateColumns: "minmax(0px, 35%) minmax(0px, 65%)",
-                  gridGap: "10px",
-                }}
-              >
-                {Object.keys(token).map((x) => {
-                  return (
-                    <React.Fragment key={`${tid}${x}`}>
-                      <Td
-                        display={{
-                          base: "table-cell",
-                          md: "none",
-                        }}
-                        sx={{
-                          "@media print": {
-                            display: "none",
-                          },
-                          textTransform: "uppercase",
-                          color: color1,
-                          fontSize: "xs",
-                          fontWeight: "bold",
-                          letterSpacing: "wider",
-                          fontFamily: "heading",
-                        }}
-                      >
-                        {x}
-                      </Td>
-                      <Td
-                        color={"gray.500"}
-                        fontSize="md"
-                        fontWeight="hairline"
-                      ></Td>
-                    </React.Fragment>
-                  );
-                })}
-                <Td
-                  display={{
-                    base: "table-cell",
-                    md: "none",
-                  }}
-                  sx={{
-                    "@media print": {
-                      display: "none",
-                    },
-                    textTransform: "uppercase",
-                    color: color2,
-                    fontSize: "xs",
-                    fontWeight: "bold",
-                    letterSpacing: "wider",
-                    fontFamily: "heading",
-                  }}
-                >
-                  Actions
-                </Td>
-                <Td>
-                  <ButtonGroup variant="solid" size="sm" spacing={3}>
-                    <IconButton
-                      colorScheme="blue"
-                      icon={<BsBoxArrowUpRight />}
-                      aria-label="Up"
-                    />
-                    <IconButton
-                      colorScheme="green"
-                      icon={<AiFillEdit />}
-                      aria-label="Edit"
-                    />
-                    <IconButton
-                      colorScheme="red"
-                      variant="outline"
-                      icon={<BsFillTrashFill />}
-                      aria-label="Delete"
-                    />
-                  </ButtonGroup>
-                </Td>
-              </Tr>
-            );
-          })}
-        </Tbody>
-      </Table>
-    </Flex>
-  );
+  useEffect(() => {
+    const getData = async () => {
+      let patients = await getPatients();
+      console.log(patients[0]);
+      setPatients(patients);
+    };
+
+    getData();
+  }, []);
+
+  const navigate = useNavigate();
+
+  const patientInfo = (patient: any) => {
+    return (
+      <Card m={"3em"} key={patient.id}>
+        <CardHeader>
+          <Heading size="xs">
+            {dayjs(patient.CreatedDate).format("DD MMMM, YYYY hh:mm")}
+          </Heading>
+        </CardHeader>
+        <Code p={"2em"}>{patient.accesstoken}</Code>
+        <HStack spacing={4} m={"1em"} display={"inline-block"}>
+          {patient.availableResource.map((resource: any) => (
+            <Tag
+              key={resource}
+              size={"md"}
+              m={"5px"}
+              variant={
+                resource === "ExplanationOfBenefit" ? "solid" : "outline"
+              }
+              onClick={() => {
+                if (resource === "ExplanationOfBenefit") {
+                  navigate(`/patients/${patient.id}`);
+                }
+              }}
+              cursor={
+                resource === "ExplanationOfBenefit" ? "pointer" : "default"
+              }
+              minWidth="fit-content"
+              color={
+                resource === "ExplanationOfBenefit" ? "white" : "brand.400"
+              }
+              bgColor={resource === "ExplanationOfBenefit" ? "brand.400" : ""}
+            >
+              {resource}
+            </Tag>
+          ))}
+        </HStack>
+      </Card>
+    );
+  };
+
+  return <div>{patients && patients.map((p: any, key) => patientInfo(p))}</div>;
 }
