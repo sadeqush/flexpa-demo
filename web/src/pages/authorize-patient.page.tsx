@@ -1,15 +1,6 @@
 import { useEffect, useState } from "react";
 import { FLEXPA_PUBLISHABLE_KEY } from "../config";
-import {
-  chakra,
-  Box,
-  Stack,
-  Flex,
-  Button,
-  Divider,
-  Center,
-  Spinner,
-} from "@chakra-ui/react";
+import { chakra, Box, Stack, Flex, Button, Divider } from "@chakra-ui/react";
 import { LockIcon } from "@chakra-ui/icons";
 import { useNavigate } from "react-router-dom";
 import FlexpaFailure from "../components/flexpa-failure.component";
