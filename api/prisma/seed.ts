@@ -19,8 +19,7 @@ export async function createUser(username: string, password: string) {
   }
 }
 
-//Seeding
-createUser("admin2", "password")
+createUser("admin", "password")
   .then(async () => {
     await prisma.$disconnect();
   })
