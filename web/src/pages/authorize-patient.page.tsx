@@ -70,13 +70,13 @@ export const AuthorizePatientPage = () => {
               _dark={{ color: "gray.100" }}
               mb={6}
             >
-              <chakra.span display="block">Ready to dive in?</chakra.span>
+              <chakra.span display="block">Ready to view demo?</chakra.span>
               <chakra.span
                 display="block"
                 color="brand.600"
                 _dark={{ color: "gray.500" }}
               >
-                Get started today.
+                Get started now.
               </chakra.span>
             </chakra.span>
 
@@ -116,7 +116,7 @@ export const AuthorizePatientPage = () => {
                     healthcareProviderButtonOnClickListener();
                   }}
                 >
-                  I am a Healthcare Provider
+                  I am Viewing Patient Data
                 </Button>
               </Box>
             </Stack>

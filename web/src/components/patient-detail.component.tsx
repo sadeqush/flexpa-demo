@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { getExplanationOfBenefit } from "../api";
 import { Button, Center, Code, Spinner, useToast } from "@chakra-ui/react";
-import { ArrowBackIcon } from "@chakra-ui/icons";
+import { ArrowBackIcon, RepeatIcon } from "@chakra-ui/icons";
 const fhirReact = require("fhir-react");
 
 export default function PatientDetail(props: any) {
@@ -38,7 +38,7 @@ export default function PatientDetail(props: any) {
 
   const fhirResourceViewer = (resource: any, id: any) => {
     return (
-      <Code m={"2em"} p={"2em"} key={id}>
+      <Code mx={"2em"} my={"1em"} p={"1em"} key={id}>
         <fhirReact.FhirResource
           fhirResource={resource}
           fhirVersion={fhirReact.fhirVersions.R4}
@@ -64,9 +64,6 @@ export default function PatientDetail(props: any) {
 
   return (
     <>
-      {patient.entry.map((item: any, index: any) =>
-        fhirResourceViewer(item.resource, index)
-      )}
       {!patient && (
         <Center backdropBlur="6px" h="50rem">
           <Button
@@ -78,7 +75,33 @@ export default function PatientDetail(props: any) {
           >
             Go Back
           </Button>
+          <Button
+            mx="1em"
+            rightIcon={<RepeatIcon />}
+            onClick={() => {
+              window.location.reload();
+            }}
+          >
+            Refresh Page
+          </Button>
         </Center>
+      )}
+      {patient && (
+        <Button
+          mx={"2em"}
+          p={"1em"}
+          color={"brand.400"}
+          variant={"outline"}
+          leftIcon={<ArrowBackIcon />}
+          onClick={() => {
+            window.history.back();
+          }}
+        >
+          Go Back
+        </Button>
+      )}
+      {patient?.entry.map((item: any, index: any) =>
+        fhirResourceViewer(item.resource, index)
       )}
     </>
   );

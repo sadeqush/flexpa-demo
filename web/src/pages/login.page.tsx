@@ -1,10 +1,11 @@
-import { Navigate } from "react-router-dom";
+import { Navigate, useNavigate } from "react-router-dom";
 import { isAuthenticated } from "../utils/auth.util";
 import { useState } from "react";
 import {
   Box,
   Button,
   Center,
+  Divider,
   Flex,
   FormControl,
   FormErrorMessage,
@@ -16,7 +17,7 @@ import {
   chakra,
   useToast,
 } from "@chakra-ui/react";
-import { ViewIcon, ViewOffIcon } from "@chakra-ui/icons";
+import { DragHandleIcon, ViewIcon, ViewOffIcon } from "@chakra-ui/icons";
 import { loginUser } from "../api";
 
 export const LoginPage = () => {
@@ -25,6 +26,8 @@ export const LoginPage = () => {
   const [password, setPassword] = useState("");
 
   const toast = useToast();
+
+  const navigate = useNavigate();
 
   if (isAuthenticated()) return <Navigate to="/patients" />;
 
@@ -89,7 +92,7 @@ export const LoginPage = () => {
             _dark={{ color: "gray.100" }}
             mb={6}
           >
-            <chakra.span display="block">Healthcare Provider?</chakra.span>
+            <chakra.span display="block">Viewing Patient Data?</chakra.span>
             <chakra.span
               display="block"
               color="brand.600"
@@ -139,6 +142,17 @@ export const LoginPage = () => {
                   onClick={handleLogin}
                 >
                   Login
+                </Button>
+                <Divider />
+
+                <Button
+                  color="brand.400"
+                  variant="outline"
+                  onClick={() => {
+                    navigate("/");
+                  }}
+                >
+                  Go Back to Homepage
                 </Button>
               </Stack>
             </Center>
