@@ -33,6 +33,7 @@ export async function authorizePatientHandler(publicToken: string) {
   }
 }
 
+//Returns a list of all patients and their auth token. This should eventually be paginated.
 export async function getAllPatients() {
   try {
     let patients = await prisma.patient.findMany();
@@ -42,6 +43,7 @@ export async function getAllPatients() {
   }
 }
 
+//Query for the Flexpa auth token from patient Id, and ask flexpa for FHIR resource of the patient
 export async function getFHIRResourceFromFlexpa(
   patient_id: number,
   resource: string

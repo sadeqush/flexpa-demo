@@ -23,7 +23,6 @@ declare const FlexpaLink: {
 
 export const AuthorizePatientPage = () => {
   const [connStatus, setConnStatus] = useState("");
-  const [loadingStatus, setLoadingStatus] = useState(false);
 
   const navigate = useNavigate();
 
@@ -59,20 +58,6 @@ export const AuthorizePatientPage = () => {
 
   async function handleConnectionFailure() {
     setConnStatus("failure");
-  }
-
-  if (loadingStatus) {
-    return (
-      <Center backdropBlur="6px" h="50rem">
-        <Spinner
-          thickness="4px"
-          speed="0.65s"
-          emptyColor="gray.200"
-          color="blue.500"
-          size="xl"
-        />
-      </Center>
-    );
   }
 
   return (

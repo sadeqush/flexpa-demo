@@ -19,20 +19,3 @@ export async function loginUser(username: string, password: string) {
     throw e;
   }
 }
-
-export async function createUser(username: string, password: string) {
-  try {
-    const hashedPassword = await argon2.hash(password);
-    let user = await prisma.user.create({
-      data: {
-        username: username,
-        password: hashedPassword,
-      },
-    });
-    if (user) return true;
-    return false;
-  } catch (e) {
-    console.log(e);
-    throw e;
-  }
-}

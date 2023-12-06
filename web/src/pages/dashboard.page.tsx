@@ -1,18 +1,5 @@
-import {
-  Box,
-  Button,
-  Flex,
-  Icon,
-  Text,
-  useColorModeValue,
-} from "@chakra-ui/react";
-import { FaBell, FaClipboardCheck, FaRss } from "react-icons/fa";
-import { AiFillGift } from "react-icons/ai";
-import { BsGearFill } from "react-icons/bs";
-import { FiMenu, FiSearch } from "react-icons/fi";
-import { HiCode, HiCollection } from "react-icons/hi";
-import { MdContactEmergency, MdHome } from "react-icons/md";
-import { LockIcon, PlusSquareIcon } from "@chakra-ui/icons";
+import { Box, Button, Flex } from "@chakra-ui/react";
+import { LockIcon } from "@chakra-ui/icons";
 import { isAuthenticated } from "../utils/auth.util";
 import { Navigate } from "react-router-dom";
 

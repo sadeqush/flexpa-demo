@@ -62,7 +62,6 @@ export async function getExplanationOfBenefit(patientId: number) {
 
   try {
     const res = await axios.post(url, body, config);
-    console.log(res.data);
     return res.data;
   } catch (e) {
     return false;

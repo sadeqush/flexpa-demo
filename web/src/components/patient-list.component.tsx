@@ -10,7 +10,6 @@ export default function PatientList() {
   useEffect(() => {
     const getData = async () => {
       let patients = await getPatients();
-      console.log(patients[0]);
       setPatients(patients);
     };
 

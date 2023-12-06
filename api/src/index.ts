@@ -1,17 +1,15 @@
 import { app } from "./app";
 import { APP_PORT } from "./config";
 import { prisma } from "./database";
-import { createUser } from "./modules/user/user.service";
 
 app.listen(APP_PORT, async () => {
   try {
     await prisma.$connect();
-    console.log("Database connection has been established.");
+    console.log("\x1b[32mDatabase connection has been established.");
   } catch (error) {
-    //console.error("\x1b[31m Database connection could not be established.");
-    console.log(error);
+    console.error("\x1b[31m Database connection could not be established.");
     process.exit();
   }
 
-  console.log(`Server Running on http://localhost:${APP_PORT}`);
+  console.log(`\x1b[32mServer Running on http://localhost:${APP_PORT}`);
 });

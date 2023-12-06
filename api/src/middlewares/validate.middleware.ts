@@ -1,6 +1,7 @@
 import { NextFunction, Request, Response } from "express";
 import { AnyZodObject } from "zod";
 
+//Function to validate request coming to the APIs
 export const validate =
   (schema: AnyZodObject) =>
   (req: Request, res: Response, next: NextFunction) => {
